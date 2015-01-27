@@ -3,14 +3,16 @@
 ### Authors / Contributors
 
 **Michele Adduci**
-(<adducimi@informatik.hu-berlin.de>), Research Associate @ 
+, Research Associate @ 
 Humboldt Universität zu Berlin - Computer Vision Dept.
+
+Any additional contribution with demos and examples is welcome.
 
 ----------
 
 ### What is this repository for?
 
-This repository contains examples related to Image Processing, as part of lectures of Winter Semester 2014/15,
+This repository contains examples related to Image Processing, as part of Computer Vision lectures of Winter Semester 2014/15,
 directed by Prof. Dr. rer. nat. **R. Reulke**
 
 ----------
@@ -20,9 +22,9 @@ directed by Prof. Dr. rer. nat. **R. Reulke**
 - **Basic Operations**
 	- binarization - shows the thresholding functions applied to an image (Binary, Binary Inverted, Truncate, To Zero, To Zero Inverted)
 	- conversions - shows some color conversions available in OpenCV (Grayscale, HSV, HLS, Lab, YUV)
-	- dilation - demonstrates the dilation operator
-	- erosion - demonstrates the erosion operator
-	- smoothing - shows the smoothing filters applied to an image (Median, Gaussian, Bilateral, Homogeneous)
+	- dilation    - demonstrates the dilation operator
+	- erosion     - demonstrates the erosion operator
+	- smoothing   - shows the smoothing filters applied to an image (Median, Gaussian, Bilateral, Homogeneous)
 
 ----------
 
@@ -36,14 +38,14 @@ directed by Prof. Dr. rer. nat. **R. Reulke**
 
 - **Image Processing**
 	- canny_edge - shows the Canny Edge detector
-	- gradients - shows the available image gradients operations available in OpenCV (Sobel, Laplacian, Scharr)
+	- gradients  - shows the available image gradients operations available in OpenCV (Sobel, Laplacian, Scharr)
 	- histograms - shows the histograms of an image, changing brightness and contrast
-	- watershed - shows the watershed segmentation algorithm applied to an image
+	- watershed  - shows the watershed segmentation algorithm applied to an image
 
 ----------
 
 - **Object Detection**
-	- face_detection - shows the Face Detection algorithm using Haar Cascade Feature Histograms	
+	- face_detection    - shows the Face Detection algorithm using Haar Cascade Feature Histograms	
 	- template_matching - demonstrates the Template Matching using Histograms
 
 ----------
@@ -52,7 +54,7 @@ directed by Prof. Dr. rer. nat. **R. Reulke**
 
 Tools/Dependencies needed:
 
-* **Linux**: g++ (4.8+) / **MS Windows**: Visual Studio (2012+)
+* C++11 compiler - **Linux**: g++ (4.8+) / **MS Windows**: Visual Studio (2012+)
 * CMake 2.8.11+
 * OpenCV 2.4.8+ (stable or development version)
 
