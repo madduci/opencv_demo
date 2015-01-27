@@ -1,0 +1,4 @@
+ADD_SUBDIRECTORY(canny_edge)
+ADD_SUBDIRECTORY(gradients)
+ADD_SUBDIRECTORY(histograms)
+ADD_SUBDIRECTORY(watershed)

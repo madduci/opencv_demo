@@ -1,0 +1,8 @@
+include("${CMAKE_ROOT}/Modules/BundleUtilities.cmake") 
+
+message(STATUS "Install path for binaries: @INSTALL_PATH@")
+
+file(GLOB EXECUTABLES @INSTALL_PATH@/cv_*)
+
+message(status "Executables: ${EXECUTABLES}")
+fixup_bundle(${EXECUTABLES} "@LIB_DEPS@" "@LIB_LOCS@")

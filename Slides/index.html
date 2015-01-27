@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<!--
+  Google HTML5 slide template
+
+  Authors: Luke Mahé (code)
+           Marcin Wichary (code and design)
+           
+           Dominic Mazzoni (browser compatibility)
+           Charles Chen (ChromeVox support)
+
+  URL: http://code.google.com/p/html5slides/
+
+
+  Image Processing with OpenCV slides
+
+  Author: Michele Adduci
+  <info@micheleadduci.net>
+-->
+
+<html>
+  <head>
+    <title>Image Processing with OpenCV</title>
+    <meta charset='utf-8'>
+    <script src='js/slides.js'></script>
+    <script src='js/jquery.js'></script>
+    <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+  </head>
+
+  <style>
+  h1
+  {
+    padding: 10px;
+    margin: 0 !important;
+    letter-spacing: 2px;
+  }
+  p
+  {
+    font-size: 24px;
+  }
+  li:before
+  {
+    content: none !important;
+  }
+  ul
+  {
+    list-style: circle !important;
+  }
+  remark
+  {
+    color: red;
+    font-weight: 700;
+  }
+  #footer
+  {
+    font-size: 20px;
+    position: absolute;
+    bottom: 0px;
+  }
+  #footer .left
+  {
+    text-align: left;
+    min-width: 500px;
+    float: left;
+  }
+  #footer .right
+  {
+    margin-left: 20px;
+    text-align: right;
+    display: inline;
+  }
+  #center 
+  {
+    text-align: center;
+    padding: 0px;
+  }
+  </style>
+
+  <body style='display: none'>
+    <section class='slides layout-regular template-default'>             
+      <article id="cover">
+        <h1 id="center">
+          Image Processing 
+          <br>
+          with OpenCV          
+        </h1>
+        <h4 id="center">Stereobildverarbeitung 
+        <br>
+        Prof. Dr. rer. nat. R. Reulke - WS14/15
+        </h4>
+        <p style="margin-top: 50px;" id="center"><img src="img/cover.png" width="750" /></p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci - adducimi@informatik.hu-berlin.de
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+      
+      <article id="agenda">
+        <h1>
+          Agenda
+        </h1>
+        <p>
+        <ul>        
+          <li>Introduction to OpenCV</li>
+          <li>Basic Image Manipulations</li>
+          <li>Advanced Image Manipulations</li>
+          <li>Feature Extraction</li>
+          <li>Object Detection</li>
+          <li>What's new in OpenCV 3</li>
+          <li>Build your own People detector</li>
+        </ul>
+        </p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci - adducimi@informatik.hu-berlin.de
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          What is OpenCV? 
+        </h4>
+        <p id="center"><img src="img/opencv.png" /></p>
+        <p>
+          <strong>OpenCV</strong> is an open source library that includes hundreds of Computer Vision algorithms. 
+          <br>
+          At the current status, it's divided in two branches: <remark>2.4.x</remark> and <remark>3.x</remark>.
+          <br>
+          It's organized in <strong>modules</strong>, each one of them containing specific algorithms and functions.
+        </p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv_branch2">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Modules - <remark>2.4.x</remark> Branch
+        </h4>
+        <ul style="font-size: 22px;">
+        <li><strong>core</strong> - data structures and basic functions</li>
+        <li><strong>highgui</strong> - I/O operations with cameras and files</li>
+        <li><strong>imgproc</strong> - filters, image transformations and color conversions</li>
+        <li><strong>calib3d</strong> - camera calibration, pose estimation</li>
+        <li><strong>features2d</strong> - keypoint detectors, descriptor matchers</li>
+        <li><strong>video</strong> - motion estimation, background subtraction</li>
+        <li><strong>objdetect</strong> - trained classifiers</li>
+        <li><strong>gpu</strong> - GPU accelerated algorithms</li>
+        <li>...and much more (Python wrappers, Google Test, FLANN)</li>
+        </ul>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv_branch3">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Modules - <remark>3.x</remark> Branch
+        </h4>
+        <ul style="font-size: 22px;">
+        <li><strong>core</strong> - data structures and basic functions, OpenCL wrappers</li>
+        <li><strong>highgui</strong> - I/O operations with cameras and files</li>
+        <li><strong>imgproc</strong> - filters, image transformations and color conversions</li>
+        <li><strong>calib3d</strong> - camera calibration, pose estimation</li>
+        <li><strong>features2d</strong> - keypoint detectors, descriptor matchers</li>
+        <li><strong>video</strong> - motion estimation, background subtraction</li>
+        <li><strong>objdetect</strong> - trained classifiers</li>
+        <li><strong>cuda</strong> - CUDA accelerated algorithms</li>
+        <li>...and much more (RGBD processing, image registration, text recognition)</li>
+        </ul>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Basic Concepts
+        </h4>
+        <p>Data structures and functions begin with <remark>cv</remark> namespace.</p>
+        <p>Declaration of a matrix and a point:
+        <pre>
+cv::Mat a_matrix;
+cv::Point2i a_point;</pre>
+        </p>
+        <p>Execution of a function:
+        <pre>cv::absdiff(A, B, C);</pre></p>       
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Basic Concepts
+        </h4>
+        <p>OpenCV's functions accepts data types such as <code>InputArray</code>, <code>OutputArray</code>, <code>InputArrayOfArray</code> or <code>OutputArrayOfArray</code>.
+        <p>As <code>InputArray</code> or <code>OutputArray</code>, you can use:
+        <section>
+        <pre>
+cv::Mat
+std::vector<>
+cv::Scalar[]
+cv::Vec<></pre></section></p>
+        <p>As <code>InputArrayOfArray</code> or <code>OutputArrayOfArray</code> you can use:
+        <pre>std::vector< std::vector<> ></pre></p>       
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Data Types
+        </h4>
+        <p>In addition to <code>unsigned char, bool, signed char, unsigned short, signed short, int, float, double</code>, OpenCV has its own data types: 
+        <code>CV_<bit_depth>{U|S|F}C(number_of_channels)</code></p>
+        <p>
+          Examples:
+          <section>
+          <pre>
+CV_8UC1  //8 bit unsigned char single channel
+CV_32FC3 //32 bit floating point 3 channels
+cv::Mat A(5, 5, CV_8UC1);  //5x5 matrix 8 bit uchar single channel</pre>
+          </section>
+        </p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv_point">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Data Structures - <remark>Point</remark>
+        </h4>
+        <p>
+          A point in OpenCV is defined as follow:
+          <section>
+          <pre>
+cv::Point2i point1(-100, 100); //integer coordinates
+cv::Point2f point2(-2.5, 180.0); //single precision float coordinates
+cv::Point2d point3(-3.9653, 192.0); //double precision float coordinates
+cv::Point3i point4(-100, 100, 10); //integer 3d point</pre></section>
+        </p>
+        <p>
+          Usages:
+          <pre>
+pointt3 = point1 + point2;
+pt1 *= pt1;
+double val = cv::norm(point2); //Normal</pre>
+        </p>        
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv_rect">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Data Structures - <remark>Rect</remark>
+        </h4>
+        <p>
+          A rectangle is defined as a point, then a width and a height:
+          <section>
+          <pre>
+cv::Rect2(i|f|d) rect(x_start, y_start, width, height);
+cv::Rect2i a_rect(0, 0, 100, 50); //integer coordinates and sizes</pre>
+          </section>
+        </p>
+        <p>
+          Usages:
+          <section>
+          <pre>
+double area = a_rect.area();
+cv::Point2i top_left = a_rect.tl(); //truncated if rect is Rect2d
+auto top_left = a_rect.tl();        //C++11: type is detected by compiler
+if(a_rect.contains(a_point)) {...}  //rect contains a point?</pre>
+          </section>
+        </p>        
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv_mat">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Data Structures - <remark>Mat</remark>
+        </h4>
+        <p>
+          A matrix is a n-dimensional single or multi-channel array. It stores images, voxels, vector fields, complex values, point clouds, histograms. OpenCV uses the following convention: </p>
+          <p id="center"><img src="img/opencv_order.jpg" /></p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv_mat">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Data Structures - <remark>Mat</remark>
+        </h4>
+        <p>
+          To Access elements of a Mat with type <strong>CV_8UC1</strong>: 
+          <section>
+          <pre>
+for(int i = 0; i &lt; mat.rows; ++i)
+    for(int j = 0; j &lt; mat.cols; ++j)
+        mat.at&lt;unsigned int&gt;(i,j) = 0; //extract grayscale values</pre></section>
+        </p> 
+        <p>
+          To Access elements of a Mat with type <strong>CV_8UC3</strong>: 
+          <section>
+          <pre>
+for(int i = 0; i &lt; mat.rows; ++i)
+    for(int j = 0; j &lt; mat.cols; ++j)
+      cv::Vec3b rgb = mat.at&lt;cv::Vec3b&gt;(i,j); //extract RGB values</pre></section>
+        </p> 
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv_mat">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Data Structures - <remark>Mat</remark>
+        </h4>
+        <p>
+          Usages: 
+          <section>
+          <pre>
+cv::Mat matrix(rows, cols, type);
+cv::Mat matrix(3, 4, CV_8UC1);
+cv::Mat matrix(3, 4, CV_8UC1, cv::Scalar(10));
+cv::Mat matrix = cv::Mat::zeros(3,3, CV_64F);
+cv::Mat matrix = cv::Mat::eye(3,3, CV_32F);
+M.at<double>(1,3) += 2.0f;       //increments element (1,3) by 2
+int rows = matrix.rows;  //extracts the number of rows
+if(matrix.data != nullptr) {...} //check if matrix data is valid
+matrix.convertTo(new_matrix, CV_64F); //converts to type CV_64F</pre></section>
+        </p> 
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv_ops">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Operations on Arrays
+        </h4>
+        <p>
+          <section>
+          <pre>
+using namespace cv;
+absdiff(InputArray A, InputArray B, OutputArray C);
+add(InputArray A, InputArray B, OutputArray C);
+subtract(InputArray A, InputArray B, OutputArray C);
+multiply(InputArray A, InputArray B, OutputArray C);
+divide(InputArray A, InputArray B, OutputArray C);
+bitwise_and(InputArray A, InputArray B, OutputArray C);
+bitwise_or(InputArray A, InputArray B, OutputArray C);
+bitwise_xor(InputArray A, InputArray B, OutputArray C);
+bitwise_not(InputArray A, OutputArray B);
+invert(InputArray A, OutputArray B);
+transpose(InputArray A, OutputArray B);</pre>
+          </section>
+        </p> 
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv_io">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Import images from disk
+        </h4>
+        <p>
+          <remark>Warning</remark> - by default, OpenCV imports images in <remark>BGR</remark> format
+          <section>
+          <pre>
+#include &lt;opencv2/highgui/highgui.hpp&gt;
+
+std::string image_path("/path/to/image/example.jpg");
+
+cv::Mat image;
+cv::Mat image_gray_scale;
+
+/* Opening an image file */
+image = cv::imread(image_path, 1); //or cv::imread(image_path);
+image_gray_scale = cv::imread(image_path, 0); //note the 0</pre>
+          </section>
+        </p> 
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv_io">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Import images from video files
+        </h4>
+        <p>
+          <section>
+          <pre>
+#include &lt;opencv2/highgui/highgui.hpp&gt; //OpenCV 2.4.x API
+//#include &lt;opencv2/videoio/videoio.hpp&gt; //OpenCV 3.x API
+
+std::string video_path("/path/to/video/example.avi");
+
+cv::Mat image;
+
+/* Opening a video file */
+cv::VideoCapture capture(video_path);  //opens the video
+while(capture.grab())
+{
+  capture.retrieve(image);    //stores a frame into cv::Mat
+  cv::imshow("VideoFile", image); //shows the captured frame
+  if(cv::waitKey(30) >= 0) break; //wait 30ms for an input key
+}
+</pre>
+          </section>
+        </p> 
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="whatisopencv_io">
+        <h1>
+          Introduction to OpenCV
+        </h1>
+        <h4>
+          Import images from video cameras
+        </h4>
+        <p>
+          <section>
+          <pre>
+#include &lt;opencv2/highgui/highgui.hpp&gt; //OpenCV 2.4.x API
+//#include &lt;opencv2/videoio/videoio.hpp&gt; //OpenCV 3.x API
+
+cv::Mat image;
+
+/* Opening a video file */
+cv::VideoCapture capture(0);  //opens any video source
+while(capture.grab())
+{
+  capture.retrieve(image);    //stores a frame into cv::Mat
+  cv::imshow("VideoCamera", image); //shows the captured frame
+  if(cv::waitKey(30) >= 0) break;   //wait 30ms for an input key
+}
+</pre>
+          </section>
+        </p> 
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article class='fill' id="basicimgproc">
+        <h3>
+          Basic Image Manipulation
+        </h3>
+        <p>
+          <img src='img/erosion.png'>
+        </p>
+        <div class='source white'>
+          Original Source: Wikipedia
+        </div>
+      </article>
+
+      <article id="basicimgproc">
+        <h1>
+          Basic Image Manipulation
+        </h1>
+        <h4>
+          Image filtering
+        </h4>
+        <p>
+        Image manipulations involve the usage of filters.<br>
+        A <remark>Filter</remark> modifies the pixels of an Image using a function which operates on pixels individually or on the neighbourhood of each pixel:        
+        </p> 
+        <img id="center" src="img/filter.png" width="750"/>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="basicimgproc">
+        <h1>
+          Basic Image Manipulation
+        </h1>
+        <h4>
+          Image filtering
+        </h4>
+        <ul style="font-size: 22px;">
+          <li>Smoothing</li>
+          <li>Erosion</li>
+          <li>Dilation</li>
+          <li>Binarization</li>
+          <li>Color Space Conversions</li>
+        </ul>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="basicimgproc_smoothing">
+        <h1>
+          Basic Image Manipulation
+        </h1>
+        <h4>
+          Smoothing
+        </h4>
+        <p>OpenCV offers different smoothing algorithms, such as:
+        <ul style="font-size: 22px;">
+          <li>Box Filter - <code>cv::blur()</code></li>
+          <li>Gaussian Filter - <code>cv::GaussianBlur()</code></li>
+          <li>Median Filter - <code>cv::medianBlur()</code></li>
+          <li>Bilateral Filter - <code>cv::bilateralFilter()</code></li>
+        </ul>
+        </p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="basicimgproc_blur">
+        <h1>
+          Basic Image Manipulation
+        </h1>
+        <h4>
+          Smoothing - Box Filter
+        </h4>
+        <section>
+        <pre style="font-size: 16px;">
+#include &lt;opencv2/imgproc/imgproc.hpp&gt;
+... // pass image_file as argument from command line
+cv::Mat src = cv::imread(image_file, 1 );
+cv::Mat dst;
+cv::blur(src, dst, cv::Size(3, 3)); // Box Filter 3x3</pre>
+        </section>
+        <img style="margin-left:20px;" src="img/park.jpg" height="200"/><img style="margin-left:130px;" src="img/blur.jpg" height="200"/>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="basicimgproc_erode">
+        <h1>
+          Basic Image Manipulation
+        </h1>
+        <h4>
+          Erosion
+        </h4>
+        <section>
+        <pre style="font-size: 16px;">
+#include &lt;opencv2/imgproc/imgproc.hpp&gt;
+... // pass image_file as argument from command line
+cv::Mat src = cv::imread(image_file, 1 );
+cv::Mat dst;
+cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3));
+cv::erode(src, dst, element);</pre>
+        </section>
+        <img style="margin-left:30px;" src="img/btor.jpg" height="200"/><img style="margin-left:170px;" src="img/erode.png" height="200"/>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="basicimgproc_dilate">
+        <h1>
+          Basic Image Manipulation
+        </h1>
+        <h4>
+          Dilation
+        </h4>
+        <section>
+        <pre style="font-size: 16px;">
+#include &lt;opencv2/imgproc/imgproc.hpp&gt;
+... // pass image_file as argument from command line
+cv::Mat src = cv::imread(image_file, 1 );
+cv::Mat dst;
+cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3));
+cv::dilate(src, dst, element);</pre>
+        </section>
+        <img style="margin-left:30px;" src="img/btor.jpg" height="200"/><img style="margin-left:170px;" src="img/dilate.png" height="200"/>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="basicimgproc_binary">
+        <h1>
+          Basic Image Manipulation
+        </h1>
+        <h4>
+          Binarization
+        </h4>
+        <section>
+        <pre style="font-size: 16px;">
+#include &lt;opencv2/imgproc/imgproc.hpp&gt;
+... // pass image_file as argument from command line
+cv::Mat src = cv::imread(image_file, 0);      //load as grayscale
+cv::Mat dst;
+cv::threshold(src, dst, min_val, max_val, 0); //Binary Threshold</pre>
+        </section>
+        <img style="margin-left:30px;" src="img/btor.jpg" height="200"/><img style="margin-left:170px;" src="img/binary.jpg" height="200"/>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="basicimgproc_conv">
+        <h1>
+          Basic Image Manipulation
+        </h1>
+        <h4>
+          Color Space Conversions
+        </h4>
+        <p>
+          <ul>
+            <li>Gray Scale</li>
+            <li>Hue-Saturation-Value</li>
+            <li>Hue-Lightness-Saturation</li>
+            <li>CIE-Lab</li>
+            <li>YUV</li>
+          </ul>
+        </p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="basicimgproc_conv">
+        <h1>
+          Basic Image Manipulation
+        </h1>
+        <h4>
+          Color Space Conversions - HSV
+        </h4>
+        <section>
+        <pre style="font-size: 16px;">
+#include &lt;opencv2/imgproc/imgproc.hpp&gt;
+... // pass image_file as argument from command line
+cv::Mat src = cv::imread(image_file, 1);      //load as BGR
+cv::Mat dst;
+cv::cvtColor(src, dst, <remark>CV_BGR2HSV</remark>);         //OpenCV 2.4.x API
+cv::cvtColor(src, dst, <remark>cv::COLOR_BGR2HSV</remark>);  //OpenCV 3.x API</pre>
+        </section>
+        <img style="margin-left:30px;" src="img/btor.jpg" height="200"/><img style="margin-left:170px;" src="img/hsv.jpg" height="200"/>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article class='fill' id="advancedimgproc">
+        <h3>
+          Image Processing
+        </h3>
+        <p>
+          <img src='img/canny.png'>
+        </p>
+        <div class='source red'>
+          Original Source: Wikipedia
+        </div>
+      </article>
+
+      <article id="advancedimgproc">
+        <h1>
+          Image Processing
+        </h1>
+        <h4>
+          Examples of Image processing operations:
+        </h4>
+        <ul style="font-size: 22px;">
+          <li>Histograms</li>
+          <li>Gradient Images</li>
+          <li>Edge Detection</li>
+          <li>Segmentation</li>
+        </ul>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="advancedimgproc_histograms">
+        <h1>
+          Image Processing
+        </h1>
+        <h4>
+          Histograms
+        </h4>
+        <p>It's a graphical representation of the tonal distribution in a digital image. It plots the number of pixels for each tonal value.<br>Histograms are useful for edge detection and image segmentation.</p>
+        <br>
+        <img style="margin-left:60px;" src="img/histogram_src.jpg" height="200"/><img style="margin-left:170px;" src="img/histogram.jpg" height="200"/>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="advancedimgproc_histograms">
+        <h1>
+          Image Processing
+        </h1>
+        <h4>
+          Histograms
+        </h4>
+        <section>
+        <pre style="font-size: 16px;">
+#include &lt;opencv2/imgproc/imgproc.hpp&gt;
+... // pass image_file as argument from command line
+cv::Mat src = cv::imread(image_file, 0);      //load as grayscale
+cv::Mat dst, hist;
+src.convertTo(dst, CV_8U); //force the conversion to 8 bit representation
+cv::calcHist(&dst, 1, 0, cv::Mat(), hist, 1, &histSize, 0); //compute histograms
+/* plot the histogram graph */
+cv::Mat histImage = cv::Mat::ones(200, 320, CV_8U)*255;     //the histogram container
+cv::normalize(hist, hist, 0, histImage.rows, cv::NORM_MINMAX, CV_32F);
+int binW = cvRound((double)histImage.cols/histSize);  //approximation to next integer
+for( int i = 0; i &lt; histSize; ++i )                   //drawing the histogram
+    cv::rectangle( histImage, cv::Point(i*binW, histImage.rows),
+                   cv::Point((i+1)*binW, histImage.rows - cvRound(hist.at&lt;float&gt;(i))),
+                   cv::Scalar::all(0), -1, 8, 0 );
+cv::imshow("histogram", histImage);</pre>        
+        </section>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="advancedimgproc_gradients">
+        <h1>
+          Image Processing
+        </h1>
+        <h4>
+          Gradient Images
+        </h4>
+        <p>
+          Each pixel of a gradient image measures the change in intensity of that same point in the original image, in a given direction. To get the full range of direction, gradient images in the x and y directions are computed.</p>
+          <p>OpenCV includes some Gradient Image operators, such as:
+          <ul style="font-size: 22px;">
+            <li>Sobel</li>
+            <li>Scharr</li>
+            <li>Laplacian</li>
+          </ul>
+        </p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="advancedimgproc_gradients">
+        <h1>
+          Image Processing
+        </h1>
+        <h4>
+          Gradient Images - Sobel
+        </h4>
+        <section>
+        <small>OpenCV's API:</small>
+        <pre style="font-size: 16px; margin-top: 10px;">
+void cv::Sobel(InputArray src, OutputArray dst, int depth, 
+                int dx, int dy, int kernel_size, double scale_factor,
+                double delta, int border_type);</pre>
+        <small>Compute Gradient along <code>x</code> direction:</small>
+        <pre style="font-size: 16px; margin-top: 10px;">
+#include &lt;opencv2/imgproc/imgproc.hpp&gt;
+... // pass image_file as argument from command line
+cv::Mat src = cv::imread(image_file, 0);      //load as grayscale
+cv::Mat dst; 
+cv::Sobel(src, dst, CV_64F, 1, 0, 5);</pre></section>          
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="advancedimgproc_gradients">
+        <h1>
+          Image Processing
+        </h1>
+        <h4>
+          Gradient Images - Sobel
+        </h4>
+        <p style="text-align:center;" ><img src="img/sudoku.png" height="200"/></p>
+        <p><img style="margin-left:100px;" src="img/sobel_x.jpg" height="200"/><img style="margin-left:180px;" src="img/sobel_y.jpg" height="200"/></p>       
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="advancedimgproc_edge">
+        <h1>
+          Image Processing
+        </h1>
+        <h4>
+          Canny Edge Detection 
+        </h4>          
+        <p>
+        Canny edge detection is a four step process:<br>
+        <ol style="font-size: 20px;">
+          <li>A Gaussian blur is applied to clear any speckles and free the image of noise</li>
+          <li>A gradient operator is applied for obtaining the gradients' intensity and direction</li>
+          <li>Non-maximum suppression determines if the pixel is a better candidate for an edge than its neighbours</li>
+          <li>Hysteresis thresholding finds where edges begin and end</li>
+        </ol>
+        </p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="advancedimgproc_edge">
+        <h1>
+          Image Processing
+        </h1>
+        <h4>
+          Canny Edge Detection 
+        </h4>          
+        <section>
+        <pre style="font-size: 16px; margin-top: 10px;">
+#include &lt;opencv2/imgproc/imgproc.hpp&gt;
+... // pass image_file as argument from command line
+cv::Mat src = cv::imread(image_file, 0);      //load as grayscale
+cv::Mat dst; 
+cv::Canny(src, dst, min_threshold, max_threshold);</pre>  
+        </section>        
+        <p style="text-align:center;"><img src="img/canny.jpg" height="250" /></p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="advancedimgproc_segm">
+        <h1>
+          Image Processing
+        </h1>
+        <h4>
+          Segmentation - Watershed Algorithm
+        </h4>  
+        <p>
+        The Watershed Algorithm is based on the following steps:<br>
+        <ol style="font-size: 20px;">
+          <li>Subtract foreground from background using morphological operators</li>
+          <li>Find connected components</li>
+          <li>Compute connected components' contours</li>
+          <li>Segment image's regions using contours informations (markers)</li>
+        </ol>
+        </p> 
+        <p style="text-align: center;">
+          <img src="img/coins.jpg" height="200" /><img src="img/markers.jpg" height="200" /><img src="img/watershed.jpg" height="200" /> 
+        </p>     
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article class='fill' id="featureextr">
+        <h3>
+          Feature Extraction
+        </h3>
+        <p>
+          <img src='img/features.jpg' width="800" />
+        </p>
+        <div class='source white'>
+          Original Source: Wikipedia
+        </div>
+      </article>
+
+      <article id="featureextr">
+        <h1>
+          Feature Extraction
+        </h1>
+        <h4>
+          Features Detectors and Matchers
+        </h4>
+        <div>
+          <div style="float: left; margin: 0 auto; width: 70%;">
+          <p>
+            Detectors and Descriptors:
+            <ul style="font-size: 20px;">
+            <li>SIFT</li>
+            <li>SURF</li>
+            <li>ORB</li>
+            <li>BRISK</li>
+            <li>many others (FREAK, FAST, KAZE, AKAZE)</li> 
+            </ul>
+          </p>
+          </div>
+          <div style="display: inline;">
+          <p>
+            Matchers:
+            <ul style="font-size: 20px;">
+            <li>Brute Force</li>
+            <li>FLANN</li>
+            </ul>
+          </p>
+          </div>
+        </div> 
+        <div style="float: left;"> 
+        <p>
+        <remark>Warning</remark> - <strong>SIFT</strong> and <strong>SURF</strong> detectors:<br>
+        <strong>OpenCV 2.4.x</strong> requires <code>nonfree</code> module (disabled by default)<br>
+        <strong>OpenCV 3.x</strong> requires <code>contrib</code> module (in opencv_contrib repository)
+        </p>
+        </div>        
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="featureextr_api">
+        <h1>
+          Feature Extraction
+        </h1>
+        <p>
+        OpenCV 2.4.x:
+        <pre style="margin-top:10px; font-size: 16px;">
+#include &lt;opencv2/features2d/features2d.hpp&gt; //ORB and BRISK
+#include &lt;opencv2/nonfree/features2d.hpp&gt;    //SIFT and SURF
+
+cv::Ptr&lt;cv::BRISK&gt; brisk_detector = cv::BRISK::create("BRISK");
+cv::Ptr&lt;cv::ORB&gt; orb_detector = cv::ORB::create("ORB");
+cv::SurfFeatureDetector surf_detector(num_max_keypoints);
+cv::Ptr&lt;cv::FeatureDetector&gt; sift_detector = cv::FeatureDetector::create("SIFT"); </pre>
+        </p>
+        <p>
+        OpenCV 3.x:
+        <pre style="margin-top:10px; font-size: 16px;">
+#include &lt;opencv2/features2d/features2d.hpp&gt; //ORB and BRISK
+#include &lt;opencv2/xfeatures2d/nonfree.hpp&gt;   //SIFT and SURF
+
+cv::Ptr&lt;cv::BRISK&gt; brisk_detector = cv::BRISK::create();
+cv::Ptr&lt;cv::ORB&gt; orb_detector = cv::ORB::create(); 
+cv::Ptr&lt;cv::Feature2D&gt; surf_detector = cv::xfeatures2d::SURF::create();
+cv::Ptr&lt;cv::Feature2D&gt; sift_detector = cv::xfeatures2d::SIFT::create();</pre>
+        </p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="featureextr_orb">
+        <h1>
+          Feature Extraction
+        </h1>
+        <h4>
+          ORB Features Extraction and Matching
+        </h4>
+        <section>
+        <pre style="font-size: 16px;">
+#include &lt;opencv2/features2d/features2d.hpp&gt;
+... //read two images, a full image and a template image
+std::vector&lt;cv::KeyPoint&gt; templ_keypoints, full_keypoints;
+cv::Mat templ_descriptors, full_descriptors;
+std::vector&lt;cv::DMatch&gt; matches;
+cv::Ptr&lt;cv::ORB&gt; orb_detector = cv::ORB::create("ORB");
+orb_detector->detect(image_full, full_keypoints);
+orb_detector->detect(image_template, templ_keypoints);
+orb_detector->compute(image_full, full_keypoints, full_descriptors);
+orb_detector->compute(image_template, templ_keypoints, templ_descriptors);
+//Matching
+cv::BFMatcher matcher(cv::NORM_HAMMING);   //BruteForce
+matcher.match(templ_descriptors, full_descriptors, matches);
+///Some outliers matching method here (check examples source code)</pre>
+        </section>       
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="featureextr_orb">
+        <h1>
+          Feature Extraction
+        </h1>
+        <h4>
+          ORB Features Extraction and Matching
+        </h4>
+        <p style="text-align:center;">
+          <img src="img/orb.jpg" width="750" />
+        </p> 
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="featureextr_surf">
+        <h1>
+          Feature Extraction
+        </h1>
+        <h4>
+          SURF (using OpenCV 3.x API)
+        </h4>
+        <section>
+        <pre style="font-size: 16px;">
+#include &lt;opencv2/xfeatures2d/nonfree.hpp&gt;
+... //read two images, a full image and a template image
+std::vector&lt;cv::KeyPoint&gt; templ_keypoints, full_keypoints;
+cv::Mat templ_descriptors, full_descriptors;
+std::vector&lt;cv::DMatch&gt; matches;
+// Detection and Extraction - by default, SURF will try to find 100 keypoints
+cv::Ptr&lt;cv::Feature2D&gt; surf_detector = cv::xfeatures2d::SURF::create();
+surf_detector->detect(image_full, full_keypoints);   
+surf_detector->detect(image_template, templ_keypoints); 
+surf_detector->compute(image_full, full_keypoints, full_descriptors);
+surf_detector->compute(image_template, templ_keypoints, templ_descriptors);   
+// Computing matches using FLANN based approach
+cv::FlannBasedMatcher matcher;
+matcher.match(templ_descriptors, full_descriptors, matches);
+///Some outliers matching method here (check examples source code)</pre>
+        </section>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="featureextr_surf">
+        <h1>
+          Feature Extraction
+        </h1>
+        <h4>
+          SURF (using OpenCV 3.x API)
+        </h4>
+        <p style="text-align:center;">
+          <img src="img/surf.jpg" width="750" />
+        </p> 
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article class='fill' id="objdetect">
+        <h3>
+          Object Detection
+        </h3>
+        <p>
+          <img src='img/facedetection.jpg' width="750" />
+        </p>
+        <div class='source white'>
+          Original Source: Wikipedia
+        </div>
+      </article>
+
+      <article id="objdetect">
+        <h1>
+          Object Detection
+        </h1>
+        <h4>
+          How to detect objects in a scene?
+        </h4>
+        <ul>
+          <li>Template Matching</li>
+          <li>Trained Classifiers</li>
+        </ul>        
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="objdetect">
+        <h1>
+          Object Detection
+        </h1>
+        <h4>
+          Template Matching
+        </h4>
+        <p>
+          It can be based on histograms, image moments, image features, pixel distances.<br>
+          Most used approaches include <strong>Motion History Images</strong> and <strong>Mahalanobis Distance</strong> using Hu Moments.
+        </p>       
+        <p style="text-align:center;">
+        <img src="img/mhi.jpg" height="250" />
+        </p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="objdetect_matching">
+        <h1>
+          Object Detection
+        </h1>
+        <h4>
+          Template Matching - Pixel distances
+        </h4>
+        <section>
+        <pre style="font-size: 16px;">
+#include &lt;opencv2/imgproc/imgproc.hpp&gt;
+... //load template and full images 
+cv::Mat result;
+cv::matchTemplate(full, templ, result, match_method);
+//Localizing the best match with minMaxLoc
+double minVal = 0.0f, maxVal = 0.0f; 
+cv::Point minLoc, maxLoc, matchLoc;
+cv::minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc);
+//For SQDIFF and SQDIFF_NORMED, the best matches are lower values. 
+if( match_method  == cv::TM_SQDIFF || match_method == cv::TM_SQDIFF_NORMED )
+    matchLoc = minLoc;
+else //For all the other methods, the higher the better
+    matchLoc = maxLoc;
+cv::rectangle(full, matchLoc, 
+            cv::Point(matchLoc.x + templ.cols, matchLoc.y + templ.rows ), 
+            cv::Scalar(0, 255, 0), 2, 8, 0 );</pre>
+        </section>     
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="objdetect_matching">
+        <h1>
+          Object Detection
+        </h1>
+        <h4>
+          Template Matching - Pixel distances
+        </h4>
+        <img style="margin-left:30px;margin-bottom:90px;" src="img/template.jpg" height="150"/><img style="margin-left:100px;" src="img/matching.jpg" height="300"/>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="objdetect">
+        <h1>
+          Object Detection
+        </h1>
+        <h4>
+          Trained Classifiers - Haar Features
+        </h4>
+        <p>
+           A classifier is trained with a few hundred sample views of a particular object (i.e., a face or a car), called positive examples, that are scaled to the same size (e.g., 20x20), and negative examples - arbitrary images of the same size.</p>
+        <p>
+           After a classifier is trained, it can be applied to a region of interest (of the same size as used during the training) in an input image. The classifier outputs a "1" if the region is likely to show the object (i.e., face/car), and "0" otherwise. <br>
+        </p>
+        <p style="text-align:center;"><img src="img/haarfeatures.png" height="170" /></p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="objdetect_haar">
+        <h1>
+          Object Detection
+        </h1>
+        <h4>
+          Trained Classifiers - Haar Features
+        </h4>
+        <section>
+          <pre style="font-size:16px;">
+#include &lt;opencv2/objdetect/objdetect.hpp&gt;
+std::string face_cascade_name = "haarcascade_frontalface_alt.xml";
+std::vector&lt;cv::Rect&gt; faces;
+cv::Mat frame_gray;
+cv::cvtColor( frame, frame_gray, cv::COLOR_BGR2GRAY );
+cv::equalizeHist( frame_gray, frame_gray ); // Improve image contrast
+// Detect faces
+cv::CascadeClassifier face_cascade;
+face_cascade.detectMultiScale(frame_gray, faces, 1.1, 10,
+                              0 | cv::CASCADE_SCALE_IMAGE, cv::Size(30, 30));
+for (auto face:faces) //draw faces
+{
+    cv::Point center( face.x + face.width/2, face.y + face.height/2 );
+    cv::ellipse( frame, center, cv::Size( face.width/2, face.height/2 ), 0, 0, 360, cv::Scalar( 0, 255, 0 ), 4, 8, 0 );
+}</pre>
+        </section>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article id="objdetect_haar">
+        <h1>
+          Object Detection
+        </h1>
+        <h4>
+          Trained Classifiers - Haar Features
+        </h4>
+        <p style="text-align:center;"><img src="img/haar.jpg" height="400" /></p>
+        <div id="footer">
+          <div class="left">
+            Michele Adduci
+          </div>
+          <div class="right">
+            Humboldt Universit&auml;t zu Berlin
+          </div>
+        </div>
+      </article>
+
+      <article class='fill' id="whatsnew">
+        <h3>
+          What's new in OpenCV 3
+        </h3>
+        <p>
+          <img src='img/github.jpg' width="750" />
+        </p>
+      </article>
+
+      <article class='fill' id="whatsnew">
+        <h1>
+          What's new in OpenCV 3
+        </h1>
+        <h4>
+          New Algorithms and new Platforms supported
+        </h4>
+        <ul style="font-size:22px;">
+          <li>New Background Subtraction Algorithm: GMG</li>
+          <li>New Tracking API</li>
+          <li>Improved Face Recognition methods</li>
+          <li>3D Visualizer (requires VTK libs)</li>
+          <li>Image Registration</li>
+          <li>OCR functions (requires Tesseract libs)</li>
+          <li>SuperPixels extraction</li>
+          <li>Improved support for ARM, Android, iOS and Python</li>
+          <li>Transparent API: OpenCL-enabled algorithms (http://tiny.cc/opencv_cl)</li>
+        </ul>
+      </article>
+
+      <article id="buildyourowndetector">
+        <h3>
+          Build your own People Detector
+        </h3>
+        <h4>
+          Hints:
+        </h4>
+        <ul style="font-size:22px;">
+          <li>Cascade Classifiers</li>
+          <li>Skin Detection</li>
+          <li>Templates and Hu Moments</li>
+          <li>Motion History Images</li>
+          <li>Background Subtraction</li>
+          <li>A mix of above methods</li>
+        </ul>
+
+        <p style="color:black; margin-top: 50px;">And remember...</p>
+      </article>
+
+      <article class='fill' id="final">
+        <p>
+          <img src='img/opencv_meme.jpg' width="750" />
+        </p>
+      </article>
+
+
+      <article id="final">
+        <h2>
+          Thank you for your attention!
+        </h2>       
+        <p>
+        <strong>E-mail</strong>: <a href="mailto:adducimi@informatik.hu-berlin.de">adducimi@informatik.hu-berlin.de</a><br>
+        <strong>Home Page</strong>: <a href="http://tiny.cc/cvreulke">http://tiny.cc/cvreulke</a><br>
+        </p>
+      </article>
+
+    </section>
+
+  </body>
+</html>

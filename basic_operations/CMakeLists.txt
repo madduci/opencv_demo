@@ -1,0 +1,5 @@
+ADD_SUBDIRECTORY(binarization)
+ADD_SUBDIRECTORY(conversions)
+ADD_SUBDIRECTORY(dilation)
+ADD_SUBDIRECTORY(erosion)
+ADD_SUBDIRECTORY(smoothing)
