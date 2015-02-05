@@ -1,12 +1,13 @@
-# OpenCV Examples - 1.0.0
+# OpenCV Examples - 1.0.0 
+
+[ ![Codeship Status for blackibiza/opencv_demo](https://codeship.com/projects/f8ed6680-8f47-0132-366b-2e671bfc968e/status?branch=master)](https://codeship.com/projects/61178)
 
 ### Authors / Contributors
 
-**Michele Adduci**
-, Research Associate @ 
+**Michele Adduci**, Research Associate @ 
 Humboldt Universität zu Berlin - Computer Vision Dept.
 
-Any additional contribution with demos and examples is welcome.
+Any additional contribution with demos, examples or optimizations is warmly welcome.
 
 ----------
 
@@ -31,8 +32,8 @@ directed by Prof. Dr. rer. nat. **R. Reulke**
 - **Feature Extraction**
 	- BRISK
 	- ORB
-	- SIFT
-	- SURF
+	- SIFT (in OpenCV 2.4.x not available, in OpenCV 3.x the **contrib** module is required)
+	- SURF (in OpenCV 2.4.x not available, in OpenCV 3.x the **contrib** module is required)
 
 ----------
 
@@ -56,7 +57,9 @@ Tools/Dependencies needed:
 
 * C++11 compiler - **Linux**: g++ (4.8+) / **MS Windows**: Visual Studio (2012+)
 * CMake 2.8.11+
-* OpenCV 2.4.8+ (stable or development version)
+* OpenCV:
+	- 2.4.x branch
+	- 3.x branch with **contrib** module
 
 ----------
 
